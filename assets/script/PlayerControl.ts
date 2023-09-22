@@ -3,6 +3,8 @@ const { ccclass, property } = _decorator;
 
 @ccclass("PlayerControl")
 export class PlayerControl extends Component {
+  @property()
+
   start() {
     this.node.on(Node.EventType.TOUCH_MOVE, (e: EventTouch) => {
       const { x, y } = e.getUILocation();
