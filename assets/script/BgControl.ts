@@ -1,9 +1,36 @@
-import { _decorator, Component, director, Node } from "cc";
+import {
+  _decorator,
+  Collider2D,
+  Component,
+  Contact2DType,
+  director,
+  Node,
+  PhysicsSystem2D,
+} from "cc";
+import { EnemyControl } from "./EnemyControl";
+import { BulletControl } from "./BulletControl";
 const { ccclass, property } = _decorator;
 
 @ccclass("BgControl")
 export class BgControl extends Component {
-  start() {}
+  start() {
+    PhysicsSystem2D.instance.on(
+      Contact2DType.BEGIN_CONTACT,
+      this.onBeginContact,
+      this
+    );
+  }
+
+  // 只在两个碰撞体开始接触时被调用一次
+  onBeginContact(self: Collider2D, other: Collider2D) {
+    if (other.tag === 1 && self.tag === 0) {
+      other.getComponent(EnemyControl).die();
+      self.getComponent(BulletControl).die();
+    } else if (other.tag === 0 && self.tag === 1) {
+      other.getComponent(BulletControl).die();
+      self.getComponent(EnemyControl).die();
+    }
+  }
 
   // 生命周期每帧调用函数
   update(deltaTime: number) {

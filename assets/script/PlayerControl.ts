@@ -1,7 +1,6 @@
 import {
   _decorator,
   Component,
-  director,
   EventTouch,
   instantiate,
   Node,
@@ -16,11 +15,13 @@ export class PlayerControl extends Component {
   bullet: Prefab = null;
 
   start() {
+    // 鼠标拖动
     this.node.on(Node.EventType.TOUCH_MOVE, (e: EventTouch) => {
       const { x, y } = e.getUILocation();
       this.node.setWorldPosition(v3(x, y));
     });
 
+    // 创建子弹
     this.schedule(() => {
       const { x, y } = this.node.getPosition();
       const node = instantiate(this.bullet);
